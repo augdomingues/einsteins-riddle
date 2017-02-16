@@ -1,0 +1,382 @@
+<html ng-app="einstein">
+<meta charset="utf-8">
+<head>
+	<title>Einstein's Riddle</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+	<script
+				  src="https://code.jquery.com/jquery-3.1.1.min.js"
+				  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+				  crossorigin="anonymous"></script>
+
+
+
+	<script>
+		angular.module("einstein", []);
+		angular.module("einstein").controller("riddleCtrl", function($scope) {
+			$scope.nome = "Einstein's riddle";
+
+			$scope.total = 0; //From 0 to 15
+
+			$scope.houseColors = [
+				{name: "Yellow", value: "gold"},
+				{name: "Blue", value: "cornflowerblue"},
+				{name: "Red", value: "firebrick"},
+				{name: "White", value: "white"},
+				{name: "Green", value: "chartreuse"},
+			];
+
+			$scope.nationalities = [
+				{name: "British", value: "brit"},
+				{name: "Swedish", value: "swede"},
+				{name: "Danish", value: "dane"},
+				{name: "German", value: "ger"},
+				{name: "Norwegian", value: "norw"}
+			];
+
+			$scope.pets = [
+				{name: "Fish", value: "fish"},
+				{name: "Dog", value: "dog"},
+				{name: "Horse", value: "horse"},
+				{name: "Cat", value: "cat"},
+				{name: "Birds", value: "bird"}
+			];
+
+			$scope.beverages = [
+				{name: "Beer", value: "beer"},
+				{name: "Tea", value: "tea"},
+				{name: "Coffee", value: "coffee"},
+				{name: "Milk", value: "milk"},
+				{name: "Water", value: "water"}
+			];
+
+			$scope.cigars = [
+				{name: "Pall Mall", value: "pall"},
+				{name: "Dunhill", value: "dunhill"},
+				{name: "Blends", value: "blends"},
+				{name: "BlueMaster", value: "blue"},
+				{name: "Prince", value: "prince"}
+			];
+
+
+			$scope.hints = [
+				{text: "The Brit lives in the red house", i: 1, check: false},
+				{text: "The Swede keeps dogs as pets", i: 2, check: false},
+				{text: "The Dane drinks tea", i: 3, check: false},
+				{text: "The green house is on the left of the white house", i: 4,check: false},
+				{text: "The green house's owner drinks coffee", i: 5,check: false},
+				{text: "The person who smokes Pall Mall rears birds", i: 6,check: false},
+				{text: "The owner of the yellow house smokes Dunhill", i: 7,check: false},
+				{text: "The man living in the center house drinks milk", i: 8,check: false},
+				{text: "The Norwegian lives in the first house", i: 9,check: false},
+				{text: "The man who smokes blends lives next to the one who keeps cats", i : 10,check: false},
+				{text: "The man who keeps horses lives next to the man who smokes Dunhill", i: 11,check: false},
+				{text: "The owner who smokes BlueMaster drinks beer", i: 12,check: false},
+				{text: "The German smokes Prince", i: 13,check: false},
+				{text: "The Norwegian lives next to the blue house", i: 14,check: false},
+				{text: "The man who smokes blend has a neighbor who drinks water", i: 15,check: false}
+			];
+
+			$scope.solution = {
+				first: {color: "gold", nationality: "norw", cigar: "dunhill", beverage:"water", pet:"cat"},
+				second: {color: "cornflowerblue", nationality: "dane", cigar: "blends", beverage: "tea", pet: "horse"},
+				third: {color:"firebrick", nationality: "brit", cigar: "pall", beverage: "milk", pet: "bird"},
+				fourth: {color: "chartreuse", nationality: "ger", cigar: "prince", beverage: "coffee", pet:"fish"},
+				fifth: {color: "white", nationality: "swede", cigar: "blue", beverage: "beer", pet: "dog"}
+			};
+
+			$scope.check = function(hint){
+				hint.check = !hint.check;
+				if(hint.check)
+					$scope.total++;
+				else
+					$scope.total--;
+			}
+
+			$scope.finish = function(first,second,third,fourth,fifth){
+				if((angular.equals(first,$scope.solution.first))
+				&& (angular.equals(second,$scope.solution.second))
+				&& (angular.equals(third,$scope.solution.third))
+				&& (angular.equals(fourth,$scope.solution.fourth))
+				&& (angular.equals(fifth,$scope.solution.fifth))){
+					$scope.complete =  true;
+					document.getElementById("finishText").innerHTML = "Complete!";
+				} else {
+					$scope.complete = false;
+					document.getElementById("finishText").innerHTML = "Try again!";
+
+				}
+
+			}
+
+			$scope.showSolution = function() {
+				$scope.first = angular.copy($scope.solution.first);
+				$scope.second = angular.copy($scope.solution.second);
+				$scope.third = angular.copy($scope.solution.third);
+				$scope.fourth = angular.copy($scope.solution.fourth);
+				$scope.fifth = angular.copy($scope.solution.fifth);
+			}
+
+
+		});
+	</script>
+	<style>
+
+		#header {
+			background-color: #66BB6A;
+			/*height: 300px;*/
+		}
+
+		#hinter {
+			background-color: lightgray;
+		}
+
+		.jumbotron {
+			margin-left: auto;
+			margin-right: auto;
+			text-align: center;
+		}
+
+		th {
+			text-align: center;
+		}
+
+		.selecionado {
+			color: red;
+			/*text-decoration: line-through;*/
+		}
+
+		h4, h2 {
+			text-align: center;
+		}
+
+		a {
+			text-decoration: none;
+			color: black;
+		}
+
+		a:hover {
+			text-decoration: none;
+			color: black;
+		}
+
+		a:visited {
+			text-decoration: none;
+			color: black;
+		}
+
+	</style>
+
+</head>
+<body ng-controller="riddleCtrl">
+	<div class="jumbotron" id="header">
+		<h1 style="margin-top: 0px;"> {{nome}}</h1>
+		<h3>Can you solve it?</h3>
+		<p>Einstein wrote this riddle this century. He said that <b>98%</b> of the world could not solve it. </p>
+		<center>
+			<iframe width="854" height="480" src="https://www.youtube.com/embed/1rDVz_Fb6HQ" frameborder="0" allowfullscreen></iframe>
+		</center>
+	</div>
+	<div>
+
+		<h2>The situation</h2>
+		<ul style="text-align: center;">
+			<li>There are 5 houses in five different colors.</li>
+			<li>In each house lives a person with a different nationality.</li>
+			<li>These five owners drink a certain type of beverage, smoke a certain brand of cigar and keep a certain pet.</li>
+			<li>No owners have the same pet, smoke the same brand of cigar or drink the same beverage.</li>
+			<li>Who owns the fish?</li>
+		</ul>
+		<br>
+		<h4>Use the table below to find the answer</h4>
+		<table style="margin-left: auto; margin-right: auto; text-align: center;">
+			<tr style="text-align: center; background-color: #cccccc; font-size: 20px">
+				<th></th>
+				<th ng-style="{'color': first.color}" ><i class="fa fa-home"></i>  House #1</th>
+				<th ng-style="{'color': second.color}"><i class="fa fa-home"></i>  House #2</th>
+				<th ng-style="{'color': third.color}"><i class="fa fa-home"></i>  House #3</th>
+				<th ng-style="{'color': fourth.color}"><i class="fa fa-home"></i>  House #4</th>
+				<th ng-style="{'color': fifth.color}"><i class="fa fa-home"></i>  House #5</th>
+			</tr>
+			<tr>
+				<td style="background-color: #cccccc;">
+					<b>&nbsp;House color&nbsp;&nbsp;</b>
+				</td>
+				<td>
+					<select   ng-model="first.color" ng-options="house.value as house.name for house in houseColors" class="form-control">
+						<option value="">Pick a color</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="second.color" ng-options="house.value as house.name for house in houseColors">
+						<option value="">Pick a color</option>
+					</select>
+				</td>
+				<td>
+					<select ng-model="third.color" ng-options="house.value as house.name for house in houseColors" class="form-control">
+						<option value="">Pick a color</option>
+					</select>
+				</td>
+				<td>
+					<select  ng-model="fourth.color" ng-options="house.value as house.name for house in houseColors" class="form-control">
+						<option value="">Pick a color</option>
+					</select>
+				</td>
+				<td>
+					<select  ng-model="fifth.color" ng-options="house.value as house.name for house in houseColors" class="form-control">
+						<option value="">Pick a color</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td style="background-color: #cccccc;">
+					<b>&nbsp;Nationality&nbsp;&nbsp;</b>
+				</td>
+				<td>
+					<select class="form-control" ng-model="first.nationality" ng-options="nat.value as nat.name for nat in nationalities">
+						<option value="">Pick a nationality</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="second.nationality" ng-options="nat.value as nat.name for nat in nationalities">
+						<option value="">Pick a nationality</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="third.nationality" ng-options="nat.value as nat.name for nat in nationalities">
+						<option value="">Pick a nationality</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="fourth.nationality" ng-options="nat.value as nat.name for nat in nationalities">
+						<option value="">Pick a nationality</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="fifth.nationality" ng-options="nat.value as nat.name for nat in nationalities">
+						<option value="">Pick a nationality</option>
+					</select>
+				</td>
+			</tr>
+
+			<tr>
+				<td style="background-color: #cccccc;">
+					<b>&nbsp;Cigar&nbsp;&nbsp;</b>
+				</td>
+				<td>
+					<select class="form-control" ng-model="first.cigar" ng-options="cigar.value as cigar.name for cigar in cigars">
+						<option value="">Pick a cigar</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="second.cigar" ng-options="cigar.value as cigar.name for cigar in cigars">
+						<option value="">Pick a cigar</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="third.cigar" ng-options="cigar.value as cigar.name for cigar in cigars">
+						<option value="">Pick a cigar</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="fourth.cigar" ng-options="cigar.value as cigar.name for cigar in cigars">
+						<option value="">Pick a cigar</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="fifth.cigar" ng-options="cigar.value as cigar.name for cigar in cigars">
+						<option value="">Pick a cigar</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td style="background-color: #cccccc;" >
+					<b>&nbsp;Beverage&nbsp;&nbsp;</b>
+				</td>
+				<td>
+					<select class="form-control" ng-model="first.beverage" ng-options="bev.value as bev.name for bev in beverages">
+						<option value="">Pick a beverage</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="second.beverage" ng-options="bev.value as bev.name for bev in beverages">
+						<option value="">Pick a beverage</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="third.beverage" ng-options="bev.value as bev.name for bev in beverages">
+						<option value="">Pick a beverage</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="fourth.beverage" ng-options="bev.value as bev.name for bev in beverages">
+						<option value="">Pick a beverage</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="fifth.beverage" ng-options="bev.value as bev.name for bev in beverages">
+						<option value="">Pick a beverage</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td style="background-color: #cccccc;">
+					<b>&nbsp;Pet&nbsp;&nbsp;</b>
+				</td>
+				<td>
+					<select class="form-control" ng-model="first.pet" ng-options="pet.value as pet.name for pet in pets">
+						<option value="">Pick a pet</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="second.pet" ng-options="pet.value as pet.name for pet in pets">
+						<option value="">Pick a pet</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="third.pet" ng-options="pet.value as pet.name for pet in pets">
+						<option value="">Pick a pet</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="fourth.pet" ng-options="pet.value as pet.name for pet in pets">
+						<option value="">Pick a pet</option>
+					</select>
+				</td>
+				<td>
+					<select class="form-control" ng-model="fifth.pet" ng-options="pet.value as pet.name for pet in pets">
+						<option value="">Pick a pet</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<br>
+		<center>
+			<button style="width: 150px; font-size: 20px" ng-click="showSolution()" class="btn btn-danger">Solution</button>
+			<button style="width: 150px; font-size: 20px" ng-click='finish(first,second,third,fourth,fifth)' class="btn btn-info">Finish</button>
+		</center>
+		<h1 id="finishText" style="text-align: center;"></p>
+	</div>
+
+		<br><br>
+		<div id="hinter" class="jumbotron">
+			<h2>Hints (Click to check)</h2>
+			<p><i>{{total}}/15 checked</i></p>
+			<div ng-repeat="hint in hints" ng-click="check(hint)">
+				<a href=""><p style="font-size: 16px" ng-class="{selecionado: hint.check}" >{{hint.i}}. {{hint.text}}</p></a>
+			</div>
+		</div>
+
+	<div style="text-align: center; " class="footer">
+		<br><br>
+		<p style="font-size: 18px;">Built with <i style="color: red" class="fa fa-heart"></i> and <i style="color: 795548" class="fa fa-coffee"></i> by <b>ac</b>sa<b>d</b>
+		<br><br>Hosted on<br> <a href="https://www.github.com/acsad" target="blank"> <i style="font-size: 40px" class="fa fa-github"></i></a>
+	</div>
+</body>
+</html>
